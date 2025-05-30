@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js"
 import bycrpt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { Profiler } from "react";
+
 
 
 export const register = async (req, res) => {
@@ -49,7 +49,7 @@ export const login = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ email });
+        let user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({
                 message: 'Incorrect Email',
@@ -74,7 +74,7 @@ export const login = async (req, res) => {
         }
 
         const tokenData = {
-            userID: user._id,
+            userId: user._id,
         }
 
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
@@ -109,11 +109,69 @@ export const logout = async (req, res) => {
         console.log("Error in Logout ", error);
     }
 }
-
 export const updateProfile = async (req, res) => {
     try {
-        
+        // Check if req.body exists to avoid destructuring error
+        if (!req.body) {
+            return res.status(400).json({
+                message: "Request body is missing",
+                success: false
+            });
+        }
+
+        const { fullname, email, phoneNumber, bio, skills } = req.body;
+        const file = req.file;
+
+        // Prepare skills array if skills string provided
+        let skillsArray;
+        if (skills) {
+            skillsArray = skills.split(",").map(skill => skill.trim());
+        }
+
+        const userId = req.id; // user id set by isAuthenticated middleware
+
+        let user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(400).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        // Update fields only if provided
+        if (fullname) user.fullname = fullname;
+        if (email) user.email = email;
+        if (phoneNumber) user.phoneNumber = phoneNumber;
+        if (bio) user.profile.bio = bio;
+        if (skills) user.profile.skills = skillsArray;
+
+        // TODO: Handle file upload to cloudinary or similar here
+        // if (file) { ... upload logic ... }
+
+        await user.save();
+
+        // Prepare response user data (avoid sending sensitive info)
+        const responseUser = {
+            _id: user._id,
+            fullname: user.fullname,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+            profile: user.profile
+        };
+
+        return res.status(200).json({
+            message: "Profile updated Successfully",
+            user: responseUser,
+            success: true
+        });
+
     } catch (error) {
-        
+        console.error("Error in updateProfile:", error);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
     }
-}
+};

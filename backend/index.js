@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
+import userRoute from "./routes/user.route.js";
 dotenv.config({});
 
 const app = express();
@@ -27,6 +28,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
+
+// * All the Apis will come here
+app.use("/api/v1/user", userRoute);   //& to ye kyse banega deekh ab --> http://localhost:8000/api/v1/user/register  mtlb ye bs ek link banta hai apis
 
 app.listen(PORT, () => {
     connectDB();

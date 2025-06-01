@@ -134,4 +134,3 @@ export const getAdminJobs = async (req, res) => {
         console.log("Error in finding jobs published by Admin ", error);
     }
 }
-

@@ -5,16 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 import './App.css'
+import Navbar from './components/shared/Navbar'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <Button>Hello bro</Button>
-    <Separator></Separator>
-    <p>hello how are you</p>
-
+    <Navbar/>
     </>
   )
 }

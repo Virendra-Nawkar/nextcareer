@@ -129,7 +129,7 @@ export const updateStatus = async (req, res) => {
         // update the stutus
         application.status = status.toLowerCase();
         await application.save();
-
+// ok
         return res.status(200).json({
             message: "Status updated Successfully",
             success: true

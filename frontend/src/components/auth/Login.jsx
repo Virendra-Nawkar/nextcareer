@@ -3,10 +3,15 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { RadioGroup } from "@/components/ui/radio-group"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import axios from 'axios'
+import { USER_API_END_POINT } from "../../utils/constant.js"
+
 
 const Login = () => {
+    const navigate = useNavigate()
     const [input, setinput] = useState({
         email: "",
         password: "",
@@ -19,7 +24,23 @@ const Login = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        console.log(input);
+
+        try {
+            const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true,
+            });
+
+            if (res.data.success) {
+                navigate("/");
+                toast.success(res.data.message);
+            }
+        } catch (error) {
+            console.log("Error in Submit Hanlder ", error);
+            toast.error(error.response.data.message);
+        }
     }
 
 
@@ -49,14 +70,12 @@ const Login = () => {
                         <RadioGroup className="flex items-center gap-4 my-5" defaultValue="student">
                             <div className="flex items-center gap-3">
                                 <Input type="radio" name="role" value="student" className="cursor-pointer"
-                                    checked={input.role === 'student'} onChange={changeEventHandler}
-                                />
+                                    checked={input.role === 'student'} onChange={changeEventHandler} />
                                 <Label htmlFor="r1">Student</Label>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Input type="radio" name="role" value="recruiter" className="cursor-pointer"
-                                    checked={input.role === 'recruiter'} onChange={changeEventHandler}
-                                />
+                                    checked={input.role === 'recruiter'} onChange={changeEventHandler} />
                                 <Label htmlFor="r2">Recruiter</Label>
                             </div>
                         </RadioGroup>

@@ -13,16 +13,16 @@ import { Link } from 'react-router-dom'
 const Navbar = () => {
     const user = false;
     return (
-        <div className='bg-white px-5'>
-            <div className='flex items-center justify-between mx-auto max-w-7xl h-16'>
+        <div className='bg-white px-4 border-b border-b-stone-300'>
+            <div className='flex items-center justify-between mx-auto max-w-7xl h-14'>
                 <div>
                     <h1 className='text-2xl font-bold'>Next<span className='text-[#F83002] '>Carrer</span></h1>
                 </div>
                 <div className='flex items-center gap-4'>
                     <ul className='flex font-medium items-center gap-5'>
-                        <li>Home</li>
-                        <li>Jobs</li>
-                        <li>Browse</li>
+                        <li><Link to='/'>Home</Link></li>
+                        <li><Link to='/jobs'>Jobs</Link></li>
+                        <li><Link to='/browse'>Browse</Link></li>
                     </ul>
                     {
                         !user ? (<div className='flex items-center gap-2'>

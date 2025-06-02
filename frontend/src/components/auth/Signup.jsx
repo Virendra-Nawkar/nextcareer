@@ -8,6 +8,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from "sonner"
 import { USER_API_END_POINT } from "../../utils/constant";
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from "../../redux/authSlice.js"
+ 
+
 
 
 const Signup = () => {
@@ -21,6 +25,10 @@ const Signup = () => {
     });
 
     const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const { loading } = useSelector(store => store.auth);
+
+
     const changeEventHandler = (e) => {
         setinput({ ...input, [e.target.name]: e.target.value });
     }
@@ -28,7 +36,8 @@ const Signup = () => {
         setinput({ ...input, file: e.target.files?.[0] });
     }
     const submitHandler = async (e) => {
-        e.preventDefault(); 
+        dispatch(setLoading(true))
+        e.preventDefault();
         const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
@@ -40,19 +49,21 @@ const Signup = () => {
         }
         try {
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-                headers : {
-                    "Content-Type" : "multipart/form-data"
+                headers: {
+                    "Content-Type": "multipart/form-data"
                 },
-                withCredentials : true,
+                withCredentials: true,
             });
 
-            if(res.data.success){
+            if (res.data.success) {
                 navigate("/login");
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log("Error in Submit Hanlder ", error);  
+            console.log("Error in Submit Hanlder ", error);
             toast.error(error.response.data.message);
+        } finally {
+            dispatch(setLoading(false))
         }
     }
 
@@ -118,8 +129,12 @@ const Signup = () => {
                         </div>
 
                     </div>
-                    <Button type="submit" className="w-full my-4">Signup</Button>
-                    <span className='text-sm'>Already have an Account ? <Link className='text-blue-600' to="/login">Login</Link></span>
+                    {
+                        loading ?
+                            <Button className="w-full my-4"><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please Wait</Button>
+                            : <Button type="submit" className="w-full my-4">Login</Button>
+                    }
+                    <span className='text-sm'>Already have an Account ? <Link className='text-blue-600' to="/login">SignUp</Link></span>
                 </form>
             </div>
         </div>

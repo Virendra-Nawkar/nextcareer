@@ -20,31 +20,25 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     fullname: user?.fullname || '',
     email: user?.email || '',
     phoneNumber: user?.phoneNumber || '',
-    bio: user?.bio || '',
+    bio: user?.profile?.bio || '',
     skills: user?.profile?.skills?.join(', ') || '', // comma separated string
     file: null // cannot prefill a file input
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput(prev => ({ ...prev, [name]: value }));
-  };
+  const changeEventHandler = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
+  }
 
-  const handleFileChange = (e) => {
-    setInput(prev => ({ ...prev, file: e.target.files[0] }));
-  };
+  const fileChangeHandler = (e) => {
+    const file = e.target.files?.[0];
+    setInput(...input, file);
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
 
-    // TODO: Add your form submission logic here (e.g., API call)
-
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false); // close dialog on success
-    }, 1000);
-  };
+  const submitHandler = (e) => {
+    e.preventDefalut();
+    console.log(input);
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -52,7 +46,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         <DialogHeader>
           <DialogTitle>Update Profile</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={submitHandler}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="fullname" className="text-right">Name</Label>
@@ -60,7 +54,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="fullname"
                 name="fullname"
                 value={input.fullname}
-                onChange={handleChange}
+                onChange={changeEventHandler}
                 className="col-span-3"
               />
             </div>
@@ -71,7 +65,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="bio"
                 name="bio"
                 value={input.bio}
-                onChange={handleChange}
+                onChange={changeEventHandler}
                 className="col-span-3"
               />
             </div>
@@ -82,7 +76,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="email"
                 name="email"
                 value={input.email}
-                onChange={handleChange}
+                onChange={changeEventHandler}
                 className="col-span-3"
               />
             </div>
@@ -93,7 +87,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="phoneNumber"
                 name="phoneNumber"
                 value={input.phoneNumber}
-                onChange={handleChange}
+                onChange={changeEventHandler}
                 className="col-span-3"
               />
             </div>
@@ -104,7 +98,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="skills"
                 name="skills"
                 value={input.skills}
-                onChange={handleChange}
+                onChange={changeEventHandler}
                 className="col-span-3"
               />
             </div>
@@ -116,7 +110,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 name="file"
                 type="file"
                 accept="application/pdf"
-                onChange={handleFileChange}
+                onChange={fileChangeHandler}
                 className="col-span-3"
               />
             </div>

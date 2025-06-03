@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const userFromStorage = localStorage.getItem("user");   //chatgpt line
+
+
 const authSlice = createSlice({
     name :"auth",
     initialState : {
         loading : false,
-        user :null
+        // user :null
+        user: userFromStorage ? JSON.parse(userFromStorage) : null,   //chatgpt line
+        
     },
     reducers : {
         // actions

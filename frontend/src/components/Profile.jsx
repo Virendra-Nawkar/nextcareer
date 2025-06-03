@@ -7,6 +7,8 @@ import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobTable from './AppliedJobTable';
 import UpdateProfileDialog from './UpdateProfileDialog';
+import { useSelector } from 'react-redux';
+import store from '@/redux/store';
 // import AppliedJobTable from './AppliedJobTable';
 // import UpdateProfileDialog from './UpdateProfileDialog';
 
@@ -14,6 +16,13 @@ const isResume = true;
 
 const Profile = () => {
   const [open, setOpen] = useState(false);
+  const { user } = useSelector(store => store.auth);
+  const fullname = user?.fullname || "No Name";
+  const email = user?.email || "No Email";
+  const bio = user?.bio || "No Bio";
+  const phoneNumber = user?.phoneNumber || "No phoneNumber";
+  const skills = user?.profile?.skills || "No skills";
+  // const resume = user?.fullname || "No Name";
 
   return (
     <div>
@@ -28,8 +37,8 @@ const Profile = () => {
               />
             </Avatar>
             <div>
-              <h1 className="font-medium text-xl">John Doe</h1>
-              <p>Short user bio goes here...</p>
+              <h1 className="font-medium text-xl">{fullname}</h1>
+              <p>{bio}</p>
             </div>
           </div>
           <Button onClick={() => setOpen(true)} variant="outline" className="text-right">
@@ -40,21 +49,25 @@ const Profile = () => {
         <div className="my-5">
           <div className="flex items-center gap-3 my-2">
             <Mail />
-            <span>johndoe@example.com</span>
+            <span>{email}</span>
           </div>
           <div className="flex items-center gap-3 my-2">
             <Contact />
-            <span>+91 9876543210</span>
+            <span>{phoneNumber}</span>
           </div>
         </div>
 
         <div className="my-5">
           <h1>Skills</h1>
+
           <div className="flex items-center gap-1">
-            <Badge>HTML</Badge>
+            {
+              user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) : <span>NA</span>
+            }
+            {/* <Badge>HTML</Badge>
             <Badge>CSS</Badge>
             <Badge>JavaScript</Badge>
-            <Badge>React</Badge>
+            <Badge>React</Badge> */}
           </div>
         </div>
 

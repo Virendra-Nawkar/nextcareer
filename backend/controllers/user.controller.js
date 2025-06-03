@@ -109,9 +109,17 @@ export const logout = async (req, res) => {
         console.log("Error in Logout ", error);
     }
 }
+
 export const updateProfile = async (req, res) => {
     try {
-        // Check if req.body exists to avoid destructuring error
+
+        
+        // Debug logs to inspect incoming request
+        console.log("REQ.BODY:", req.body);
+        console.log("REQ.FILE:", req.file);
+        console.log("REQ.ID:", req.id);
+
+        // Check if request body exists
         if (!req.body) {
             return res.status(400).json({
                 message: "Request body is missing",
@@ -119,39 +127,48 @@ export const updateProfile = async (req, res) => {
             });
         }
 
+        // Destructure and extract data
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         const file = req.file;
 
-        // Prepare skills array if skills string provided
-        let skillsArray;
-        if (skills) {
+        // Split skills only if provided and is not empty
+        let skillsArray = [];
+        if (skills && typeof skills === 'string' && skills.trim() !== "") {
             skillsArray = skills.split(",").map(skill => skill.trim());
         }
 
-        const userId = req.id; // user id set by isAuthenticated middleware
+        // Validate req.id from middleware
+        const userId = req.id;
+        if (!userId) {
+            console.error("Missing req.id - isAuthenticated middleware might be broken");
+            return res.status(401).json({ message: "Unauthorized", success: false });
+        }
 
+        // Find user by ID
         let user = await User.findById(userId);
-
         if (!user) {
-            return res.status(400).json({
-                message: "User not Found",
+            return res.status(404).json({
+                message: "User not found",
                 success: false
             });
         }
 
-        // Update fields only if provided
+        // Conditionally update fields
         if (fullname) user.fullname = fullname;
         if (email) user.email = email;
         if (phoneNumber) user.phoneNumber = phoneNumber;
         if (bio) user.profile.bio = bio;
-        if (skills) user.profile.skills = skillsArray;
+        if (skillsArray.length > 0) user.profile.skills = skillsArray;
 
-        // TODO: Handle file upload to cloudinary or similar here
-        // if (file) { ... upload logic ... }
+        // Placeholder for future file upload
+        if (file) {
+            console.warn("Resume file uploaded but no upload logic implemented yet.");
+            // TODO: Upload to cloudinary or file service and store the URL
+        }
 
         await user.save();
 
-        // Prepare response user data (avoid sending sensitive info)
+        // Prepare response (no sensitive data)
         const responseUser = {
             _id: user._id,
             fullname: user.fullname,

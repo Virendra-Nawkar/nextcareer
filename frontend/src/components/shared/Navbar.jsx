@@ -4,12 +4,20 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User2, Menu, X, Sun, Moon } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@/components/theme-provider";
+import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_END_POINT } from "../../utils/constant";
+import { setUser } from "@/redux/authSlice";
+
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -17,6 +25,41 @@ const Navbar = () => {
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     setTheme(theme === "dark" ? "light" : theme === "light" ? "dark" : systemTheme);
   };
+
+  // const logoutHandler = async () => {
+  //   console.log("Logout buttoon click");
+  //   try {
+  //     const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
+  //     if (res.data.true) {
+  //       dispatch(setUser(null));
+  //       navigate("/");
+  //       toast.success(res.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error in Logout ", error);
+  //     toast.error("Error in Logout ", error);
+  //   }
+  // }
+
+  const logoutHandler = async () => {
+    console.log("Logout button clicked");
+    try {
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
+      if (res.data.success) {
+        dispatch(setUser(null));
+        localStorage.removeItem("user"); // 🔁 You said you wanted to remember this!
+        navigate("/");
+        toast.success(res.data.message);
+      } else {
+        toast.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error in Logout:", error);
+      toast.error("Error in Logout");
+    }
+  };
+
+
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 transition-colors duration-300">
@@ -74,12 +117,12 @@ const Navbar = () => {
                     </div>
                     <div className="space-y-2">
                       <Link to="/profile">
-                        <Button variant="ghost" className="w-full justify-start">
+                        <Button variant="ghost" className="w-full justify-start hover:cursor-pointer">
                           <User2 className="h-4 w-4" />
                           <span>View Profile</span>
                         </Button>
                       </Link>
-                      <Button variant="ghost" className="w-full justify-start">
+                      <Button variant="ghost" onClick={logoutHandler} className="w-full justify-start hover:cursor-pointer">
                         <LogOut className="h-4 w-4" />
                         <span>Logout</span>
                       </Button>
@@ -124,12 +167,12 @@ const Navbar = () => {
             ) : (
               <div className="pt-2 space-y-2">
                 <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className="w-full justify-start hover:cursor-pointer">
                     <User2 className="h-4 w-4" />
                     <span>View Profile</span>
                   </Button>
                 </Link>
-                <Button variant="ghost" className="w-full justify-start">
+                <Button onClick={logoutHandler} variant="ghost" className="w-full justify-start hover:cursor-pointer">
                   <LogOut className="h-4 w-4" />
                   <span>Logout</span>
                 </Button>

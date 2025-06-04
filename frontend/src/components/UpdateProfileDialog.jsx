@@ -153,7 +153,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
               <Label htmlFor="file" className="text-right">Resume</Label>
               <Input
                 id="file"
-                name="file"
+                name="file" 
                 type="file"
                 accept="application/pdf,image/*"
                 onChange={fileChangeHandler}

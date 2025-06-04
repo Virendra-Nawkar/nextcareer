@@ -79,7 +79,7 @@ const Profile = () => {
             href="https://example.com/resume.pdf"
             className="text-blue-500 hover:underline cursor-pointer"
           >
-            resume.pdf
+            {user.profile.resumeOgiginalName}
           </a>
         </div>
       </div>

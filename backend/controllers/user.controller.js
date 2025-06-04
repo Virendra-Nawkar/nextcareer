@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js"
 import bycrpt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import getDataUri from "../utils/datauri.js";
 
 
 
@@ -122,7 +123,6 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
 
-
         // Debug logs to inspect incoming request
         console.log("REQ.BODY:", req.body);
         console.log("REQ.FILE:", req.file);
@@ -139,6 +139,11 @@ export const updateProfile = async (req, res) => {
         // Destructure and extract data
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         const file = req.file;
+        const fileUri =getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+
+
 
         // Split skills only if provided and is not empty
         let skillsArray = [];
@@ -170,9 +175,9 @@ export const updateProfile = async (req, res) => {
         if (skillsArray.length > 0) user.profile.skills = skillsArray;
 
         // Placeholder for future file upload
-        if (file) {
-            console.warn("Resume file uploaded but no upload logic implemented yet.");
-            // TODO: Upload to cloudinary or file service and store the URL
+        if (cloudResponse) {
+            user.profile.resume = cloudResponse.secure_url   //save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname  //save the org file name to display
         }
 
         await user.save();

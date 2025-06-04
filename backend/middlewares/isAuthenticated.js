@@ -19,6 +19,8 @@ const isAuthenticated = async (req, res, next) => {
         //  console.log("Decoded token:", decode);
 
         // req.id = decode.userId;
+        req.id = decode.userId;
+
         req.user = { id: decode.userId };
 
         next();

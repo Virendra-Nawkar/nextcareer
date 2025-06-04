@@ -2,9 +2,8 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js"
 import bycrpt from "bcryptjs"
 import jwt from "jsonwebtoken"
-// import getDataUri from "../utils/datauri.js";
 import cloudinary from "../../backend/utils/cloudinary.js";
-import streamifier from "streamifier";
+import getDataUri from "../utils/datauri.js";
 
 
 
@@ -123,159 +122,91 @@ export const logout = async (req, res) => {
 }
 
 
-// export const updateProfile = async (req, res) => {
-//   try {
-//     // Debug logs to inspect incoming request
-//     console.log("REQ.BODY:", req.body);
-//     console.log("REQ.FILE:", req.file);
-//     console.log("REQ.ID:", req.id);
-
-//     // Check if request body exists
-//     if (!req.body) {
-//       return res.status(400).json({
-//         message: "Request body is missing",
-//         success: false
-//       });
-//     }
-
-//     // Destructure and extract data
-//     const { fullname, email, phoneNumber, bio, skills } = req.body;
-//     const file = req.file;
-
-//     let cloudResponse = null;
-
-//     // Only process file if it's uploaded
-//     if (file) {
-//       const fileUri = getDataUri(file);
-//       cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-//     }
-
-//     // Split skills if provided
-//     let skillsArray = [];
-//     if (skills && typeof skills === 'string' && skills.trim() !== "") {
-//       skillsArray = skills.split(",").map(skill => skill.trim());
-//     }
-
-//     // Validate req.id from middleware
-//     const userId = req.id;
-//     if (!userId) {
-//       console.error("Missing req.id - isAuthenticated middleware might be broken");
-//       return res.status(401).json({ message: "Unauthorized", success: false });
-//     }
-
-//     // Find user by ID
-//     let user = await User.findById(userId);
-//     if (!user) {
-//       return res.status(404).json({
-//         message: "User not found",
-//         success: false
-//       });
-//     }
-
-//     // Conditionally update fields
-//     if (fullname) user.fullname = fullname;
-//     if (email) user.email = email;
-//     if (phoneNumber) user.phoneNumber = phoneNumber;
-//     if (bio) user.profile.bio = bio;
-//     if (skillsArray.length > 0) user.profile.skills = skillsArray;
-
-//     // Save resume info only if file was uploaded
-//     if (cloudResponse) {
-//       user.profile.resume = cloudResponse.secure_url;
-//       user.profile.resumeOriginalName = file.originalname;
-//     }
-
-//     await user.save();
-
-//     // Prepare response (no sensitive data)
-//     const responseUser = {
-//       _id: user._id,
-//       fullname: user.fullname,
-//       email: user.email,
-//       phoneNumber: user.phoneNumber,
-//       role: user.role,
-//       profile: user.profile
-//     };
-
-//     return res.status(200).json({
-//       message: "Profile updated Successfully",
-//       user: responseUser,
-//       success: true
-//     });
-
-//   } catch (error) {
-//     console.error("Error in updateProfile:", error);
-//     return res.status(500).json({
-//       message: "Internal Server Error",
-//       success: false,
-//     });
-//   }
-// };
-
-// import User from "../models/user.model.js";
-// import { v2 as cloudinary } from "cloudinary";
-// import streamifier from "streamifier"; // ✅ Required for converting buffer to stream
-
-// ✅ ADD THIS FUNCTION — before updateProfile()
-const streamUpload = (req) => {
-    return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-            {
-                folder: "nextcareer-resumes",
-                resource_type: "raw", // ✅ very important for PDF
-            },
-            (error, result) => {
-                if (result) {
-                    resolve(result);
-                } else {
-                    reject(error);
-                }
-            }
-        );
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-    });
-};
-
-// ✅ Your updateProfile controller
 export const updateProfile = async (req, res) => {
-    try {
-        console.log("REQ.BODY:", req.body);
-        console.log("REQ.FILE:", req.file);
-        console.log("REQ.ID:", req.user.id);
+  try {
+    // Debug logs to inspect incoming request
+    console.log("REQ.BODY:", req.body);
+    console.log("REQ.FILE:", req.file);
+    console.log("REQ.ID:", req.id);
 
-        const { fullname, email, phoneNumber, bio, skills } = req.body;
-        let cvUrl = "";
-
-        if (req.file) {
-            const result = await streamUpload(req);
-            console.log("Cloudinary Upload Result:", result);
-            cvUrl = result.secure_url; // ✅ Save this in DB
-        }
-
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            {
-                fullname,
-                email,
-                phoneNumber,
-                "profile.bio": bio,
-                "profile.skills": skills?.split(',') || [],
-                "profile.resume": cvUrl,
-                "profile.resumeOriginalName": req.file?.originalname,
-            },
-            { new: true }
-        );
-
-        res.status(200).json({
-            success: true,
-            message: "Profile updated successfully",
-            user: updatedUser,
-        });
-    } catch (error) {
-        console.error("Error in updateProfile:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
+    // Check if request body exists
+    if (!req.body) {
+      return res.status(400).json({
+        message: "Request body is missing",
+        success: false
+      });
     }
+
+    // Destructure and extract data
+    const { fullname, email, phoneNumber, bio, skills } = req.body;
+    const file = req.file;
+
+    let cloudResponse = null;
+
+    // Only process file if it's uploaded
+    if (file) {
+      const fileUri = getDataUri(file);
+      cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+    }
+
+    // Split skills if provided
+    let skillsArray = [];
+    if (skills && typeof skills === 'string' && skills.trim() !== "") {
+      skillsArray = skills.split(",").map(skill => skill.trim());
+    }
+
+    // Validate req.id from middleware
+    const userId = req.id;
+    if (!userId) {
+      console.error("Missing req.id - isAuthenticated middleware might be broken");
+      return res.status(401).json({ message: "Unauthorized", success: false });
+    }
+
+    // Find user by ID
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false
+      });
+    }
+
+    // Conditionally update fields
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (bio) user.profile.bio = bio;
+    if (skillsArray.length > 0) user.profile.skills = skillsArray;
+
+    // Save resume info only if file was uploaded
+    if (cloudResponse) {
+      user.profile.resume = cloudResponse.secure_url;
+      user.profile.resumeOriginalName = file.originalname;
+    }
+
+    await user.save();
+
+    // Prepare response (no sensitive data)
+    const responseUser = {
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      profile: user.profile
+    };
+
+    return res.status(200).json({
+      message: "Profile updated Successfully",
+      user: responseUser,
+      success: true
+    });
+
+  } catch (error) {
+    console.error("Error in updateProfile:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
 };

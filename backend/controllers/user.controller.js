@@ -26,8 +26,17 @@ export const register = async (req, res) => {
         const hashedPassword = await bycrpt.hash(password, 10);
 
         await User.create({
-            fullname, email, phoneNumber, password: hashedPassword, role
-        })
+            fullname,
+            email,
+            phoneNumber,
+            password: hashedPassword,
+            role,
+            profile: {
+                bio: "",
+                skills: [],
+                profilePhoto: ""
+            }
+        });
 
         return res.status(201).json({
             message: "Account Created Successfully",
@@ -113,7 +122,7 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
 
-        
+
         // Debug logs to inspect incoming request
         console.log("REQ.BODY:", req.body);
         console.log("REQ.FILE:", req.file);

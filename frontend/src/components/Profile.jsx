@@ -19,7 +19,8 @@ const Profile = () => {
   const { user } = useSelector(store => store.auth);
   const fullname = user?.fullname || "No Name";
   const email = user?.email || "No Email";
-  const bio = user?.bio || "No Bio";
+  const bio = user?.profile?.bio || "No Bio";
+
   const phoneNumber = user?.phoneNumber || "No phoneNumber";
   const skills = user?.profile?.skills || "No skills";
   // const resume = user?.fullname || "No Name";

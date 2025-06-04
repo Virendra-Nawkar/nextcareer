@@ -1,25 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const userFromStorage = localStorage.getItem("user");   //chatgpt line
-
+const userFromStorage = localStorage.getItem("user");
 
 const authSlice = createSlice({
-    name :"auth",
-    initialState : {
-        loading : false,
-        // user :null
-        user: userFromStorage ? JSON.parse(userFromStorage) : null,   //chatgpt line
-        
+  name: "auth",
+  initialState: {
+    loading: false,
+    user: userFromStorage ? JSON.parse(userFromStorage) : null,
+  },
+  reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
-    reducers : {
-        // actions
-        setLoading : (state, action) => {
-            state.loading = action.payload;
-        },
-        setUser : (state, action) => {
-            state.user = action.payload;
-        }
-    }
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+  },
 });
-export const {setLoading, setUser} = authSlice.actions;
+
+export const { setLoading, setUser } = authSlice.actions;
 export default authSlice.reducer;

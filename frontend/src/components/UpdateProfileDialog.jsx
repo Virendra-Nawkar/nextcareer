@@ -42,7 +42,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   };
 
   const submitHandler = async (e) => {
-    e.preventDefault(); // ✅ typo fixed
+    e.preventDefault();
     setLoading(true);
 
     const formData = new FormData();
@@ -65,7 +65,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       });
 
       if (res.data.success) {
+        console.log("Updated user data from backend:", res.data.user);
         dispatch(setUser(res.data.user));
+        localStorage.setItem("user", JSON.stringify(res.data.user));  // <-- Sync to localStorage
         toast.success(res.data.message);
         setOpen(false);
       }
@@ -75,7 +77,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (

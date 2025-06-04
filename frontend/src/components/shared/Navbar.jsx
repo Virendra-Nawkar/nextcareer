@@ -68,7 +68,7 @@ const Navbar = () => {
                         <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <h4 className="font-medium text-gray-900 dark:text-white">{user.name || "User"}</h4>
+                        <h4 className="font-medium text-gray-900 dark:text-white">{user.fullname || "Userrr"}</h4>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{user.email || "Member"}</p>
                       </div>
                     </div>

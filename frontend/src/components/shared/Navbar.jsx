@@ -99,7 +99,7 @@ const Navbar = () => {
               <Popover>
                 <PopoverTrigger asChild>
                   <Avatar className="cursor-pointer h-9 w-9 border-2 border-transparent hover:border-[#6A38C2] dark:hover:border-[#7B5FAC] transition-all">
-                    <AvatarImage src="/Account.png" alt="User avatar" />
+                    <AvatarImage src= {user?.profile?.profilePhoto} alt="User avatar" />
                     <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                 </PopoverTrigger>
@@ -107,7 +107,7 @@ const Navbar = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src="/Account.png" alt="User avatar" />
+                        <AvatarImage src= {user?.profile?.profilePhoto} alt="User avatar" />
                         <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                       </Avatar>
                       <div>

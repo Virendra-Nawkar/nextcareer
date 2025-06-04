@@ -17,6 +17,11 @@ export const register = async (req, res) => {
             });
         };
 
+        const file = req.file
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+
         const user = await User.findOne({ email })
         if (user) {
             return res.status(400).json({
@@ -36,7 +41,7 @@ export const register = async (req, res) => {
             profile: {
                 bio: "",
                 skills: [],
-                profilePhoto: ""
+                profilePhoto: cloudResponse.secure_url,
             }
         });
 

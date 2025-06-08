@@ -1,22 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import Navbar from './shared/Navbar';
+import { useParams } from 'react-router-dom';
+import useGetSingleJob from '@/hooks/useGetSingleJob';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSingleJob } from '@/redux/jobSlice';
+import { JOB_API_END_POINT } from '@/utils/constant';
 
 const isApplied = false; // You can make this dynamic based on your app's logic
 
 const JobDescription = () => {
+  const params = useParams();
+  const jobId = params.id;
+  const {singleJob} = useSelector(store => store.job);
+  useGetSingleJob(jobId)         //custom hook to get a single job
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchSingleJob = async () => {
+      try {
+        const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
+        if (res.data.success) {
+          dispatch(setSingleJob(res.data.jobs));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchSingleJob();
+  }, [jobId, dispatch]);
+
+
   return (
+
     <>
 
       <Navbar />
       <div className="max-w-7xl mx-auto my-10">
-        <h1 className="font-bold text-xl">Frontend Developer</h1>
+        <h1 className="font-bold text-xl">{singleJob?.title || "No Title"}</h1>
 
         <div className="flex items-center gap-2 mt-4">
-          <Badge className="text-blue-700 font-bold" variant="ghost">12 Positions</Badge>
-          <Badge className="text-[#F83002] font-bold" variant="ghost">Part Time</Badge>
-          <Badge className="text-[#7209b7] font-bold" variant="ghost">24LPA</Badge>
+          <Badge className="text-blue-700 font-bold" variant="ghost">{singleJob?.positon}</Badge>
+          <Badge className="text-[#F83002] font-bold" variant="ghost">{singleJob?.jobType}</Badge>
+          <Badge className="text-[#7209b7] font-bold" variant="ghost">{singleJob?.salary + " LPA"}</Badge>
         </div>
 
         <div className="flex items-center justify-between mt-6">

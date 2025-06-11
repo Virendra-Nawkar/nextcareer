@@ -67,7 +67,7 @@ const Navbar = () => {
                     <Link to="/admin/companies" className="nav-link">Companies</Link>
                     <Link to="/admin/jobs" className="nav-link">Jobs</Link>
                   </div>
-                ) : ( 
+                ) : (
                   <div className="flex gap-4">
                     <Link to="/" className="nav-link">Home</Link>
                     <Link to="/jobs" className="nav-link">Jobs</Link>
@@ -91,8 +91,6 @@ const Navbar = () => {
                 </Link>
               </div>
             ) : (
-              // {
-              //   user && user.role === 'recruiter' ? () : ()}
               <Popover>
                 <PopoverTrigger asChild>
                   <Avatar className="cursor-pointer h-9 w-9 border-2 border-transparent hover:border-[#6A38C2] dark:hover:border-[#7B5FAC] transition-all">
@@ -113,12 +111,16 @@ const Navbar = () => {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Link to="/profile">
-                        <Button variant="ghost" className="w-full justify-start hover:cursor-pointer">
-                          <User2 className="h-4 w-4" />
-                          <span>View Profile</span>
-                        </Button>
-                      </Link>
+                      {
+                        user && user.role === 'student' && (<div>
+                          <Link to="/profile">
+                            <Button variant="ghost" className="w-full justify-start hover:cursor-pointer">
+                              <User2 className="h-4 w-4" />
+                              <span>View Profile</span>
+                            </Button>
+                          </Link>
+                        </div>)
+                      }
                       <Button variant="ghost" onClick={logoutHandler} className="w-full justify-start hover:cursor-pointer">
                         <LogOut className="h-4 w-4" />
                         <span>Logout</span>

@@ -26,20 +26,6 @@ const Navbar = () => {
     setTheme(theme === "dark" ? "light" : theme === "light" ? "dark" : systemTheme);
   };
 
-  // const logoutHandler = async () => {
-  //   console.log("Logout buttoon click");
-  //   try {
-  //     const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
-  //     if (res.data.true) {
-  //       dispatch(setUser(null));
-  //       navigate("/");
-  //       toast.success(res.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error in Logout ", error);
-  //     toast.error("Error in Logout ", error);
-  //   }
-  // }
 
   const logoutHandler = async () => {
     console.log("Logout button clicked");
@@ -59,8 +45,6 @@ const Navbar = () => {
     }
   };
 
-
-
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 transition-colors duration-300">
       <div className="container mx-auto px-4">
@@ -77,9 +61,20 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <nav className="flex items-center space-x-6">
-              <Link to="/" className="nav-link">Home</Link>
-              <Link to="/jobs" className="nav-link">Jobs</Link>
-              <Link to="/browse" className="nav-link">Browse</Link>
+              {
+                user && user.role === 'recruiter' ? (
+                  <div className="flex gap-4">
+                    <Link to="/admin/companies" className="nav-link">Companies</Link>
+                    <Link to="/admin/jobs" className="nav-link">Jobs</Link>
+                  </div>
+                ) : ( 
+                  <div className="flex gap-4">
+                    <Link to="/" className="nav-link">Home</Link>
+                    <Link to="/jobs" className="nav-link">Jobs</Link>
+                    <Link to="/browse" className="nav-link">Browse</Link>
+                  </div>
+                )
+              }
             </nav>
 
             {!user ? (
@@ -96,10 +91,12 @@ const Navbar = () => {
                 </Link>
               </div>
             ) : (
+              // {
+              //   user && user.role === 'recruiter' ? () : ()}
               <Popover>
                 <PopoverTrigger asChild>
                   <Avatar className="cursor-pointer h-9 w-9 border-2 border-transparent hover:border-[#6A38C2] dark:hover:border-[#7B5FAC] transition-all">
-                    <AvatarImage src= {user?.profile?.profilePhoto} alt="User avatar" />
+                    <AvatarImage src={user?.profile?.profilePhoto} alt="User avatar" />
                     <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                 </PopoverTrigger>
@@ -107,7 +104,7 @@ const Navbar = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src= {user?.profile?.profilePhoto} alt="User avatar" />
+                        <AvatarImage src={user?.profile?.profilePhoto} alt="User avatar" />
                         <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                       </Avatar>
                       <div>

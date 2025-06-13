@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -13,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Edit2, MoreHorizontal } from 'lucide-react';
 
 const CompaniesTable = () => {
+
   return (
     <div>
       <Table>
@@ -57,3 +59,55 @@ const CompaniesTable = () => {
 };
 
 export default CompaniesTable;
+
+
+
+// import React from 'react';
+// import { useSelector } from 'react-redux';
+// import useGetAllJobs from '@/hooks/useGetAllJobs';
+// import {
+//   Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow
+// } from '../ui/table';
+
+// const JobsTable = () => {
+//   useGetAllJobs();
+//   const { allJobs } = useSelector((store) => store.job);
+
+//   return (
+//     <div>
+//       <Table>
+//         <TableCaption>A list of all jobs posted</TableCaption>
+//         <TableHeader>
+//           <TableRow>
+//             <TableHead>Title</TableHead>
+//             <TableHead>Company</TableHead>
+//             <TableHead>Date</TableHead>
+//             <TableHead className="text-right">Action</TableHead>
+//           </TableRow>
+//         </TableHeader>
+//         <TableBody>
+//           {allJobs && allJobs.length > 0 ? (
+//             allJobs.map((job) => (
+//               <TableRow key={job._id}>
+//                 <TableCell>{job.title}</TableCell>
+//                 <TableCell>{job.company?.name || 'N/A'}</TableCell>
+//                 <TableCell>{new Date(job.createdAt).toLocaleDateString()}</TableCell>
+//                 <TableCell className="text-right">
+//                   {/* Add Edit/Delete/Details here */}
+//                 </TableCell>
+//               </TableRow>
+//             ))
+//           ) : (
+//             <TableRow>
+//               <TableCell colSpan={4} className="text-center">No jobs found</TableCell>
+//             </TableRow>
+//           )}
+//         </TableBody>
+//       </Table>
+//     </div>
+//   );
+// };
+
+// export default JobsTable;
+
+

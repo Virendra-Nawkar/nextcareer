@@ -6,7 +6,6 @@ import { setSingleJob } from '@/redux/jobSlice';
 
 const useGetSingleJob = (jobId) => {
     const dispatch = useDispatch();
-    
 
 }
 

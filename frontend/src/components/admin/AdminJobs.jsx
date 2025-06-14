@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setSearchCompanyByText } from '@/redux/companySlice';
 import AdminJobsTable from './AdminJobsTable';
 import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs';
+import {setSearchJobByText} from "@/redux/jobSlice"
 
 const AdminJobs = () => {
     useGetAllAdminJobs()
@@ -15,7 +16,7 @@ const AdminJobs = () => {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        dispatch(setSearchCompanyByText(input));
+        dispatch(setSearchJobByText(input));
     }, [dispatch, input])
 
     return (

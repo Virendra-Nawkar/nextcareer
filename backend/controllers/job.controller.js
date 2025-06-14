@@ -157,23 +157,50 @@ export const getJobById = async (req, res) => {
 
 
 // admin , numebers of job created
-export const getAdminJobs = async (req, res) => {
-    try {
-        const amdinId = req.id;
-        const jobs = await Job.find({ created_by: amdinId });
-        if (!jobs) {
-            return res.status(404).json({
-                message: "No Jobs are found for this Admin User",
-                success: false
-            });
-        }
+// export const getAdminJobs = async (req, res) => {
+//     try {
+//         const amdinId = req.id;
+//         const jobs = await Job.find({ created_by: amdinId });
+//         if (!jobs) {
+//             return res.status(404).json({
+//                 message: "No Jobs are found for this Admin User",
+//                 success: false
+//             });
+//         }
 
-        return res.status(200).json({
-            message: "Jobs Founds successfully",
-            jobs,
-            success: true
-        });
-    } catch (error) {
-        console.log("Error in finding jobs published by Admin ", error);
+//         return res.status(200).json({
+//             message: "Jobs Founds successfully",
+//             jobs,
+//             success: true
+//         });
+//     } catch (error) {
+//         console.log("Error in finding jobs published by Admin ", error);
+//     }
+// }
+export const getAdminJobs = async (req, res) => {
+  try {
+    const adminId = req.id; // Assuming you're setting this via middleware
+
+    const jobs = await Job.find({ created_by: adminId })
+      .populate("company") // Properly populate the referenced company
+      .sort({ createdAt: -1 }); // Sort jobs by latest
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No jobs found",
+      });
     }
-}
+
+    return res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    console.error("Error in getAdminJobs:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

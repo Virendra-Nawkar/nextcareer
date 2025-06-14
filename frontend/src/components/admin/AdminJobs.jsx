@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../shared/Navbar';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import CompaniesTable from './CompaniesTable';
 import { useNavigate } from 'react-router-dom';
-import useGetAllCompanies from '@/hooks/useGetAllCompanies';
 import { useDispatch } from 'react-redux';
 import { setSearchCompanyByText } from '@/redux/companySlice';
 import AdminJobsTable from './AdminJobsTable';
+import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs';
 
 const AdminJobs = () => {
-    useGetAllCompanies();
+    useGetAllAdminJobs()
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [input, setInput] = useState("");
@@ -32,7 +31,7 @@ const AdminJobs = () => {
                     />
                     <Button onClick={() => { navigate('/admin/companies/create') }}> New Job</Button>
                 </div>
-                 <AdminJobsTable/>
+                <AdminJobsTable />
             </div>
         </div>
     );

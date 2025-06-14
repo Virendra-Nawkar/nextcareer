@@ -11,6 +11,8 @@ import { ThemeProvider } from './components/theme-provider';
 import Companies from './components/admin/Companies';
 import CompanyCreate from './components/admin/CompanyCreate';
 import CompanySetup from './components/admin/CompanySetup';
+import AdminJobs from './components/admin/AdminJobs';
+
 
 const appRouter = createBrowserRouter([
   {
@@ -49,7 +51,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path : "/admin/jobs",
-    // element : <Jobs
+    element : <AdminJobs/>
   },
   {
     path : '/admin/companies/create',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Table,
@@ -14,7 +14,30 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Edit2, MoreHorizontal } from 'lucide-react';
 
 const JobsTable = () => {
-  const { companies } = useSelector((store) => store.company);
+  const { companies, searchCompanyByText } = useSelector((store) => store.company);
+  const [filterCompany, setFilterCompany] = useState(companies);
+
+  //   useEffect(() => {
+  //     const filteredCompany = companies.length >= 0 && companies.filter((company) => {
+  //       if (!searchCompanyByText) {
+  //         return true;
+  //       }
+  //       company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+
+  //     })
+  // setFilterCompany(filteredCompany)
+  //   }, [companies, searchCompanyByText])
+  
+  useEffect(() => {
+    const filteredCompany = companies.length >= 0 && companies.filter((company) => {
+      if (!searchCompanyByText) {
+        return true;
+      }
+      return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+    });
+    setFilterCompany(filteredCompany);
+  }, [companies, searchCompanyByText]);
+
 
   return (
     <div>
@@ -37,7 +60,7 @@ const JobsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              companies?.map((company) => (
+              filterCompany?.map((company) => (
                 <TableRow key={company._id}>
                   <TableCell>
                     <Avatar>

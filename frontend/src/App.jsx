@@ -13,6 +13,7 @@ import CompanyCreate from './components/admin/CompanyCreate';
 import CompanySetup from './components/admin/CompanySetup';
 import AdminJobs from './components/admin/AdminJobs';
 import PostJob from './components/admin/PostJob';
+import Applicants from './components/admin/Applicants';
 
 
 const appRouter = createBrowserRouter([
@@ -41,30 +42,34 @@ const appRouter = createBrowserRouter([
     element: <Browse />
   },
   {
-    path : "/profile",
-    element : <Profile/>
+    path: "/profile",
+    element: <Profile />
   },
 
   // Routes for Admin
   {
-    path : "/admin/companies",
-    element : <Companies/>
+    path: "/admin/companies",
+    element: <Companies />
   },
   {
-    path : "/admin/jobs",
-    element : <AdminJobs/>
+    path: "/admin/jobs",
+    element: <AdminJobs />
   },
   {
-    path : '/admin/companies/create',
-    element : <CompanyCreate/>
+    path: '/admin/companies/create',
+    element: <CompanyCreate />
   },
   {
-    path : '/admin/companies/:id',
-    element : <CompanySetup/>
+    path: '/admin/companies/:id',
+    element: <CompanySetup />
   },
   {
-    path : '/admin/jobs/create',
-    element : <PostJob/>
+    path: '/admin/jobs/create',
+    element: <PostJob />
+  },
+  {
+    path: '/admin/jobs/:id/applicants',
+    element: <Applicants />
   }
 ]);
 
@@ -72,9 +77,9 @@ function App() {
 
   return (
     <>
-    <ThemeProvider>
-      <RouterProvider router={appRouter} />
-    </ThemeProvider>
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
     </>
   )
 }

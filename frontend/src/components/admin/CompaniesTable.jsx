@@ -73,11 +73,11 @@ const JobsTable = () => {
                   <TableCell>{company.name}</TableCell>
                   <TableCell>{company.createdAt.split("T")[0]}</TableCell>
                   <TableCell className="text-right cursor-pointer flex gap-3 justify-end">
-                    <Button variant="secondary"  onClick={() => navigate(`/admin/companies/${company?._id}`)} className="flex items-center gap-2 w-fit cursor-pointer">
+                    <Button variant="secondary" onClick={() => navigate(`/admin/companies/${company?._id}`)} className="flex items-center gap-2 w-fit cursor-pointer">
                       <Edit2 className="w-4" />
                       <span>Edit</span>
                     </Button>
-                    <Button variant="secondary"  onClick={() => navigate(`/admin/companies/${company?._id}`)} className="flex items-center gap-2 w-fit cursor-pointer">
+                    <Button variant="secondary" onClick={() => navigate(`/admin/companies/${company?._id}`)} className="flex items-center gap-2 w-fit cursor-pointer">
                       <Trash2 className="w-4" />
                       <span>Delete</span>
                     </Button>

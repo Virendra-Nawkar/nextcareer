@@ -19,7 +19,7 @@ export const postJob = async (req, res) => {
 
         const userId = req.id;
 
-        // Validate required fields
+        // Validate required fields except `position` separately
         if (
             !title ||
             !description ||
@@ -28,11 +28,19 @@ export const postJob = async (req, res) => {
             !location ||
             !jobType ||
             !experienceLevel ||
-            !position ||
-            !companyId
+            companyId === undefined ||
+            companyId === null
         ) {
             return res.status(400).json({
                 message: "All the information is required, some data is missing",
+                success: false
+            });
+        }
+
+        // Check if position is a valid number (0 is valid)
+        if (position === undefined || position === null || isNaN(position)) {
+            return res.status(400).json({
+                message: "Position is required and must be a number",
                 success: false
             });
         }
@@ -63,6 +71,67 @@ export const postJob = async (req, res) => {
         });
     }
 };
+
+// export const postJob = async (req, res) => {
+//     try {
+//         const {
+//             title,
+//             description,
+//             requirements,
+//             salary,
+//             location,
+//             jobType,
+//             experienceLevel,
+//             position,
+//             companyId
+//         } = req.body;
+
+//         const userId = req.id;
+
+//         // Validate required fields
+//         if (
+//             !title ||
+//             !description ||
+//             !requirements ||
+//             !salary ||
+//             !location ||
+//             !jobType ||
+//             !experienceLevel ||
+//             !position ||
+//             !companyId
+//         ) {
+//             return res.status(400).json({
+//                 message: "All the information is required, some data is missing",
+//                 success: false
+//             });
+//         }
+
+//         const job = await Job.create({
+//             title,
+//             description,
+//             requirements: requirements.split(",").map(req => req.trim()),
+//             salary: Number(salary),
+//             location,
+//             jobType,
+//             experienceLevel,
+//             position,
+//             company: companyId,
+//             created_by: userId
+//         });
+
+//         return res.status(201).json({
+//             message: "New job created successfully",
+//             job,
+//             success: true
+//         });
+//     } catch (error) {
+//         console.log("Error in Creating a Job Post", error);
+//         return res.status(500).json({
+//             message: "Internal server error",
+//             success: false
+//         });
+//     }
+// };
 
 
 // student
@@ -178,29 +247,29 @@ export const getJobById = async (req, res) => {
 //     }
 // }
 export const getAdminJobs = async (req, res) => {
-  try {
-    const adminId = req.id; // Assuming you're setting this via middleware
+    try {
+        const adminId = req.id; // Assuming you're setting this via middleware
 
-    const jobs = await Job.find({ created_by: adminId })
-      .populate("company") // Properly populate the referenced company
-      .sort({ createdAt: -1 }); // Sort jobs by latest
+        const jobs = await Job.find({ created_by: adminId })
+            .populate("company") // Properly populate the referenced company
+            .sort({ createdAt: -1 }); // Sort jobs by latest
 
-    if (!jobs || jobs.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No jobs found",
-      });
+        if (!jobs || jobs.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No jobs found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            jobs,
+        });
+    } catch (error) {
+        console.error("Error in getAdminJobs:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
     }
-
-    return res.status(200).json({
-      success: true,
-      jobs,
-    });
-  } catch (error) {
-    console.error("Error in getAdminJobs:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
 };

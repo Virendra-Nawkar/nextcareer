@@ -9,6 +9,7 @@ import AppliedJobTable from './AppliedJobTable';
 import UpdateProfileDialog from './UpdateProfileDialog';
 import { useSelector } from 'react-redux';
 import store from '@/redux/store';
+import useGetAppliedJobs from '@/hooks/useGetAppliedJobs';
 // import AppliedJobTable from './AppliedJobTable';
 // import UpdateProfileDialog from './UpdateProfileDialog';
 
@@ -24,6 +25,8 @@ const Profile = () => {
   const phoneNumber = user?.phoneNumber || "No phoneNumber";
   const skills = user?.profile?.skills || "No skills";
   // const resume = user?.fullname || "No Name";
+
+  useGetAppliedJobs();
 
   return (
     <div>

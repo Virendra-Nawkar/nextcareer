@@ -1,16 +1,13 @@
 import React from 'react';
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
+    Table, TableBody, TableCaption, TableCell,
+    TableHead, TableHeader, TableRow
 } from '../ui/table';
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
 import { MoreHorizontal } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import { toast } from 'sonner';
+import { Button } from '../ui/button';
 
 const shortlistingStatus = ["Accepted", "Rejected"];
 
@@ -20,7 +17,9 @@ const ApplicantsTable = () => {
     return (
         <div>
             <Table>
-                <TableCaption>A list of your recent applied user</TableCaption>
+                <TableCaption>
+                    A list of your recent applied user
+                </TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead>FullName</TableHead>
@@ -28,29 +27,31 @@ const ApplicantsTable = () => {
                         <TableHead>Contact</TableHead>
                         <TableHead>Resume</TableHead>
                         <TableHead>Date</TableHead>
-                        <TableHead className="float-right cursor-pointer">Action</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {applicants && applicants.applications?.map((item, index) => (
+                    {applicants?.applications?.map((item, index) => (
                         <TableRow key={index}>
                             <TableCell>{item?.applicant?.fullname || "Name"}</TableCell>
                             <TableCell>{item?.applicant?.email || "Email"}</TableCell>
                             <TableCell>{item?.applicant?.phoneNumber || "Contact"}</TableCell>
                             <TableCell>
-                                <a href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                                    View Resume
-                                </a>
+                                {
+                                    item?.applicant?.profile?.resume
+                                        ? <a href={item.applicant.profile.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Resume</a>
+                                        : "Resume not Uploaded"
+                                }
                             </TableCell>
                             <TableCell>{new Date(item?.applicant?.createdAt).toLocaleDateString()}</TableCell>
-                            <TableCell className="float-right cursor-pointer">
+                            <TableCell className="text-right">
                                 <Popover>
                                     <PopoverTrigger>
                                         <MoreHorizontal />
                                     </PopoverTrigger>
                                     <PopoverContent className="w-32 bg-white shadow-md p-2 rounded">
                                         {shortlistingStatus.map((status, index) => (
-                                            <div key={index} className="flex w-fit items-center my-2 cursor-pointer hover:text-blue-500">
+                                            <div key={index} className="flex items-center my-2 cursor-pointer hover:text-blue-500">
                                                 <span>{status}</span>
                                             </div>
                                         ))}
@@ -60,7 +61,6 @@ const ApplicantsTable = () => {
                         </TableRow>
                     ))}
                 </TableBody>
-
             </Table>
         </div>
     );

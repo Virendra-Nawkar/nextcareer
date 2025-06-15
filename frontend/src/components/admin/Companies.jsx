@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import useGetAllCompanies from '@/hooks/useGetAllCompanies';
 import { useDispatch } from 'react-redux';
 import { setSearchCompanyByText } from '@/redux/companySlice';
+import { toast } from 'sonner'; // ✅ Make sure toast is from 'sonner'
 
 const Companies = () => {
     useGetAllCompanies();
@@ -16,7 +17,7 @@ const Companies = () => {
 
     useEffect(() => {
         dispatch(setSearchCompanyByText(input));
-    }, [dispatch, input])
+    }, [dispatch, input]);
 
     return (
         <div>
@@ -27,11 +28,21 @@ const Companies = () => {
                         className="w-fit"
                         placeholder="Filter by name"
                         onChange={(e) => setInput(e.target.value)}
-
                     />
-                    <Button onClick={() => { navigate('/admin/companies/create') }}>New Company</Button>
+                    <Button onClick={() => navigate('/admin/companies/create')}>
+                        New Company
+                    </Button>
                 </div>
+
                 <CompaniesTable />
+
+                {/* ✅ Example toast trigger */}
+                <Button
+                    onClick={() => toast.success("🎉 You are seeing rich color toast!")}
+                    className="mt-4"
+                >
+                    Show Toast
+                </Button>
             </div>
         </div>
     );

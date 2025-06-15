@@ -14,6 +14,7 @@ import CompanySetup from './components/admin/CompanySetup';
 import AdminJobs from './components/admin/AdminJobs';
 import PostJob from './components/admin/PostJob';
 import Applicants from './components/admin/Applicants';
+import { Toaster } from 'sonner';
 
 
 const appRouter = createBrowserRouter([
@@ -79,6 +80,7 @@ function App() {
     <>
       <ThemeProvider>
         <RouterProvider router={appRouter} />
+        <Toaster richColors />
       </ThemeProvider>
     </>
   )

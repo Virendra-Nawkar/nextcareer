@@ -80,7 +80,7 @@ function App() {
     <>
       <ThemeProvider>
         <RouterProvider router={appRouter} />
-        <Toaster richColors />
+        <Toaster richColors position="top-right"/>
       </ThemeProvider>
     </>
   )

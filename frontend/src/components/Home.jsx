@@ -21,7 +21,7 @@ const Home = () => {
     <div className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-zinc-100 transition-colors duration-300">
       <Navbar />
       <HeroSection />
-      <CategoryCarousel />
+      {/* <CategoryCarousel /> */}
       <LatestJobs />
       <Footer />
     </div>

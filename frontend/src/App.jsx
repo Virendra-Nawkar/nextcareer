@@ -16,6 +16,10 @@ import PostJob from './components/admin/PostJob';
 import Applicants from './components/admin/Applicants';
 import { Toaster } from 'sonner';
 import ProtectedRoute from './components/admin/ProtectedRoute';
+import ResumeTips from './components/ResumeTips';
+import InterviewPrep from './components/InterviewPrep';
+import HelpCenter from './components/HelpCenter';
+import CareerAdvice from './components/CareerAdvice';
 
 
 const appRouter = createBrowserRouter([
@@ -46,6 +50,22 @@ const appRouter = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />
+  },
+  {
+    path: "/resume-tips",
+    element: <ResumeTips />
+  },
+  {
+    path: "/interview-prep",
+    element: <InterviewPrep />
+  },
+  {
+    path: "/career-advice",
+    element: <CareerAdvice />
+  },
+  {
+    path: "/help",
+    element: <HelpCenter />
   },
 
   // Routes for Admin
@@ -98,8 +118,10 @@ function App() {
   return (
     <>
       <ThemeProvider>
-        <RouterProvider router={appRouter} />
-        <Toaster richColors />
+        <div className="min-h-screen bg-white text-black dark:bg-gray-950 dark:text-white transition-colors duration-300">
+          <RouterProvider router={appRouter} />
+          <Toaster richColors />
+        </div>
       </ThemeProvider>
     </>
   )

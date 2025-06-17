@@ -1,71 +1,95 @@
 import React from 'react';
 import { Badge } from './ui/badge';
-import { Briefcase, MapPin, DollarSign, Clock, IndianRupee } from 'lucide-react';
+import { Briefcase, MapPin, Clock, IndianRupee, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-
+import { motion } from 'framer-motion';
 
 const LatestJobCards = ({ job }) => {
   const navigate = useNavigate();
+
   return (
-    <div onClick={()=> navigate(`description/${job._id}`)} 
-      className="p-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1f1f1f] shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
+    <motion.div 
+      onClick={() => navigate(`description/${job._id}`)}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ 
+        y: -5,
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer h-full flex flex-col"
     >
       {/* Company Info */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-[#0077ff] transition-colors duration-200">
-            {job?.company?.name}
-          </h1>
-          <div className="flex items-center mt-1 text-gray-600 dark:text-gray-400 text-sm">
-            <MapPin className="h-4 w-4 mr-1 text-[#0077ff]" />
-            <span>{job?.location}</span>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+              {job?.company?.logo ? (
+                <img 
+                  src={job.company.logo} 
+                  alt={job?.company?.name} 
+                  className="w-full h-full object-contain p-1"
+                />
+              ) : (
+                <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
+                  {job?.company?.name?.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-[#638C2D] transition-colors duration-200">
+                {job?.company?.name}
+              </h1>
+              <div className="flex items-center mt-1 text-gray-600 dark:text-gray-400 text-sm">
+                <MapPin className="h-4 w-4 mr-1 text-[#638C2D]" />
+                <span>{job?.location}</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          <Badge variant="outline">  
-            {formatDistanceToNow(new Date(job?.createdAt), { addSuffix: true })}
-          </Badge>
-        </div>
+        <Badge variant="outline" className="text-xs text-gray-500 dark:text-gray-400">
+          {formatDistanceToNow(new Date(job?.createdAt), { addSuffix: true })}
+        </Badge>
       </div>
 
       {/* Job Details */}
-      <div className="mt-5">
-        <h2 className="text-lg font-medium text-gray-800 dark:text-white group-hover:text-[#0077ff] transition-colors duration-200">
+      <div className="mt-5 flex-grow">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white group-hover:text-[#638C2D] transition-colors duration-200">
           {job?.title}
         </h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
+        <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-relaxed">
           {job?.description}
         </p>
       </div>
 
       {/* Badges */}
-      <div className="mt-5 flex flex-wrap gap-3">
+      <div className="mt-5 flex flex-wrap gap-2">
         <Badge
           variant="secondary"
-          className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-200 hover:scale-105 transition-transform"
+          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
         >
-          <Briefcase className="h-4 w-4 text-[#4B5563]" />
+          <Briefcase className="h-3 w-3 text-gray-500 dark:text-gray-400" />
           {job?.position}
         </Badge>
         <Badge
           variant="secondary"
-          className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-200 hover:scale-105 transition-transform"
+          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
         >
-          <Clock className="h-4 w-4 text-[#4B5563]" />
+          <Clock className="h-3 w-3 text-gray-500 dark:text-gray-400" />
           {job?.jobType}
         </Badge>
         <Badge
           variant="secondary"
-          className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-200 hover:scale-105 transition-transform"
+          className="flex items-center gap-1 px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
         >
-          <IndianRupee className="h-4 w-4 text-[#4B5563]" />
+          <IndianRupee className="h-3 w-3 text-gray-500 dark:text-gray-400" />
           {job?.salary} LPA
         </Badge>
         {job?.isRemote && (
           <Badge
-            variant="secondary"
-            className="px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 dark:text-green-300 hover:scale-105 transition-transform"
+            className="px-3 py-1 rounded-full text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800 transition-all"
           >
             Remote
           </Badge>
@@ -73,40 +97,20 @@ const LatestJobCards = ({ job }) => {
       </div>
 
       {/* Action Button */}
-      <button
-        className="mt-6 w-full py-2 px-4 bg-[#0077ff] hover:bg-[#005ecb] dark:bg-[#2563eb] dark:hover:bg-[#1d4ed8] text-white font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-xl"
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="mt-6"
       >
-        Apply Now
-      </button>
-    </div>
+        <button
+          className="w-full py-2 px-4 bg-gradient-to-r from-[#638C2D] to-[#8BAF50] hover:from-[#557A25] hover:to-[#7A9F45] text-white font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          Apply Now
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </motion.div>
+    </motion.div>
   );
 };
 
 export default LatestJobCards;
-
-
-
-// import React from 'react';
-// import { Badge } from './ui/badge';
-
-// const LatestJobCards = ({ job }) => {
-//   return (
-//     <div className="p-4 border rounded-md shadow-xl border-gray-100">
-//       <div>
-//         <h1 className="text-xl font-semibold">{job?.company?.name}</h1>
-//         <p>{job?.location}</p>
-//       </div>
-//       <div className="mt-2">
-//         <h1 className="text-lg font-medium">{job?.title}</h1>
-//         <p>{job?.description}</p>
-//       </div>
-//       <div className="mt-2 flex gap-2 flex-wrap items-center">
-//         <Badge className="text-blue-700 font-bold" variant="ghost">{job?.position}</Badge>
-//         <Badge className="text-[#F38002] font-bold" variant="ghost">{job?.jobType}</Badge>
-//         <Badge className="text-[#7209B7] font-bold" variant="ghost">{job?.salary + " LPA"}</Badge>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LatestJobCards;

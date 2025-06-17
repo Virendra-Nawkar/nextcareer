@@ -2,11 +2,13 @@ import React from 'react';
 import { Badge } from './ui/badge';
 import { Briefcase, MapPin, DollarSign, Clock, IndianRupee } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 
 const LatestJobCards = ({ job }) => {
+  const navigate = useNavigate();
   return (
-    <div
+    <div onClick={()=> navigate(`description/${job._id}`)} 
       className="p-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1f1f1f] shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
     >
       {/* Company Info */}

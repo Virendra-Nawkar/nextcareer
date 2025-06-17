@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterCard from './FilterCard';
 import Job from './Job';
 import Navbar from './shared/Navbar';
@@ -6,11 +6,27 @@ import { useSelector } from 'react-redux';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
 import { Funnel, Menu } from 'lucide-react';
 import { Button } from './ui/button';
+// import { setSearchedQuery } from '@/redux/jobSlice'
+
 
 const Jobs = () => {
   useGetAllJobs();
-  const { allJobs } = useSelector(store => store.job);
+  const { allJobs, searchedQuery } = useSelector(store => store.job);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterJobs, setFilterJobs] = useState(allJobs);
+
+  useEffect(()=>{
+    if(searchedQuery){
+      const filteredJobs = allJobs.filter((job=>{
+        return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+        job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchedQuery.toLowerCase()) 
+      }))
+      setFilterJobs(filteredJobs) 
+    }else{
+      setFilterJobs(allJobs)
+    }
+  },[allJobs, searchedQuery])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#121212] transition-colors duration-300">
@@ -48,15 +64,14 @@ const Jobs = () => {
 
           {/* Main job content */}
           <main
-            className={`flex-1 h-[88vh] overflow-y-auto pb-5 transition-all duration-300 ${
-              isFilterOpen ? 'opacity-50 pointer-events-none select-none' : 'opacity-100'
-            }`}
+            className={`flex-1 h-[88vh] overflow-y-auto pb-5 transition-all duration-300 ${isFilterOpen ? 'opacity-50 pointer-events-none select-none' : 'opacity-100'
+              }`}
           >
-            {allJobs.length <= 0 ? (
+            {filterJobs.length <= 0 ? (
               <p className="text-center mt-10 text-gray-700 dark:text-gray-400">Job not found</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {allJobs.map((job) => (
+                {filterJobs.map((job) => (
                   <div key={job?._id}>
                     <Job job={job} />
                   </div>

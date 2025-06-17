@@ -91,14 +91,14 @@ const JobDescription = () => {
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <motion.h1 
+              <motion.h1
                 initial={{ y: -10 }}
                 animate={{ y: 0 }}
                 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white"
               >
                 {singleJob.title}
               </motion.h1>
-              
+
               <div className="flex flex-wrap items-center gap-3 mt-4">
                 <Badge className="bg-[#638C2D]/10 text-[#638C2D] hover:bg-[#638C2D]/20">
                   {singleJob.position} Position{singleJob.position !== 1 ? 's' : ''}
@@ -125,8 +125,8 @@ const JobDescription = () => {
                 onClick={isApplied ? null : applyJobHandler}
                 disabled={isApplied || isLoading}
                 size="lg"
-                className={`gap-2 ${isApplied 
-                  ? 'bg-gray-500 dark:bg-gray-600 cursor-not-allowed' 
+                className={`gap-2 ${isApplied
+                  ? 'bg-gray-500 dark:bg-gray-600 cursor-not-allowed'
                   : 'bg-[#638C2D] hover:bg-[#557A25]'}`}
               >
                 {isLoading ? (
@@ -155,7 +155,7 @@ const JobDescription = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Job Description */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -170,8 +170,8 @@ const JobDescription = () => {
             </motion.div>
 
             {/* Requirements */}
-            {singleJob.requirements && (
-              <motion.div 
+            {singleJob.requirements && singleJob.requirements.length > 0 && (
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
@@ -180,16 +180,37 @@ const JobDescription = () => {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-800">
                   Requirements
                 </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {singleJob.requirements}
-                </p>
+
+                {/* Choose one of these two: */}
+
+                {/* Option 1: Bullet List */}
+                <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+                  {singleJob.requirements.map((req, index) => (
+                    <li key={index}>{req}</li>
+                  ))}
+                </ul>
+
+                {/* OR Option 2: Badges */}
+                {/*
+    <div className="flex flex-wrap gap-2">
+      {singleJob.requirements.map((req, index) => (
+        <Badge
+          key={index}
+          className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-white"
+        >
+          {req}
+        </Badge>
+      ))}
+    </div>
+    */}
               </motion.div>
             )}
+
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -257,7 +278,7 @@ const JobDescription = () => {
 
             {/* Company Info */}
             {singleJob.company && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -268,18 +289,18 @@ const JobDescription = () => {
                 </h2>
                 <div className="flex items-center gap-4 mb-4">
                   {singleJob.company.logo && (
-                    <img 
-                      src={singleJob.company.logo} 
-                      alt={singleJob.company.name} 
+                    <img
+                      src={singleJob.company.logo}
+                      alt={singleJob.company.name}
                       className="h-12 w-12 rounded-lg object-contain border border-gray-200 dark:border-gray-700"
                     />
                   )}
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-white">{singleJob.company.name}</h3>
                     {singleJob.company.website && (
-                      <a 
-                        href={singleJob.company.website} 
-                        target="_blank" 
+                      <a
+                        href={singleJob.company.website}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#638C2D] hover:underline text-sm"
                       >

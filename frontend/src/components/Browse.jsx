@@ -6,7 +6,7 @@ import { setSearchedQuery } from '@/redux/jobSlice'
 import useGetAllJobs from '@/hooks/useGetAllJobs'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from './ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Search } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const Browse = () => {

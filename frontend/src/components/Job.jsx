@@ -18,7 +18,7 @@ const Job = ({ job }) => {
     <div className="p-6 rounded-xl shadow-lg bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-700 transition-colors duration-300">
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 select-none">
-          {formatDistanceToNow(new Date(job?.createdAt), { addSuffix: true })}
+          {job?.createdAt ? formatDistanceToNow(new Date(job.createdAt), { addSuffix: true }) : "Unknown"}
         </p>
         <Button
           variant="outline"

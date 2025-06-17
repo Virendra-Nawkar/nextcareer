@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
 import { Funnel, Menu } from 'lucide-react';
 import { Button } from './ui/button';
+import { motion } from 'framer-motion';
 // import { setSearchedQuery } from '@/redux/jobSlice'
 
 
@@ -15,18 +16,18 @@ const Jobs = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterJobs, setFilterJobs] = useState(allJobs);
 
-  useEffect(()=>{
-    if(searchedQuery){
-      const filteredJobs = allJobs.filter((job=>{
+  useEffect(() => {
+    if (searchedQuery) {
+      const filteredJobs = allJobs.filter((job => {
         return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-        job.location.toLowerCase().includes(searchedQuery.toLowerCase()) 
+          job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job.location.toLowerCase().includes(searchedQuery.toLowerCase())
       }))
-      setFilterJobs(filteredJobs) 
-    }else{
+      setFilterJobs(filteredJobs)
+    } else {
       setFilterJobs(allJobs)
     }
-  },[allJobs, searchedQuery])
+  }, [allJobs, searchedQuery])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#121212] transition-colors duration-300">
@@ -72,9 +73,14 @@ const Jobs = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {filterJobs.map((job) => (
-                  <div key={job?._id}>
+                  <motion.div
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0,  x: -100 }}
+                    transition={{ duration: 0.3 }}
+                    key={job?._id}>
                     <Job job={job} />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}

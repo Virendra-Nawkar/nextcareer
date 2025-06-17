@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -24,7 +24,7 @@ const Signup = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { loading } = useSelector(store => store.auth);
+    const { loading, user } = useSelector(store => store.auth);
 
     const changeEventHandler = (e) => {
         setinput({ ...input, [e.target.name]: e.target.value });
@@ -65,6 +65,13 @@ const Signup = () => {
             dispatch(setLoading(false))
         }
     }
+
+    useEffect(() => {
+            if (user) {
+                toast.info("You are already logged in!");
+                navigate("/");
+            }
+        }, [user, navigate]);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">

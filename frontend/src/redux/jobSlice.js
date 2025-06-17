@@ -27,15 +27,20 @@ const jobSlice = createSlice({
             state.allAppliedJobs = action.payload;
         },
         setSearchedQuery: (state, action) => {
+            console.log("Redux received query:", action.payload);
             state.searchedQuery = action.payload;
         }
     }
-})
-export const { setAllJobs,
+});
+
+export const {
+    setAllJobs,
     setSingleJob,
-    allAdminJobs,
     setAllAdminJobs,
     setSearchJobByText,
     setAllAppliedJobs,
-    setSearchedQuery } = jobSlice.actions;
-export default jobSlice.reducer
+    setSearchedQuery
+} = jobSlice.actions;
+
+export default jobSlice.reducer;
+// ji
